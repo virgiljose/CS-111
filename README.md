@@ -1,6 +1,9 @@
-# CS111
+# About This Repository
 
-** COMING SOON!
+Project Solutions for:
+* Course:     CS 111
+* Instructor: Professor Reiher
+* Term:       Winter 2018
 
 These project solutions are intended to serve strictly as a reference. I do NOT permit copying or otherwise plagiarizing my code.
 
