@@ -1,4 +1,6 @@
-# About This Repository
+# About This Repository (COMING SOON)
+
+COMING SOON - I will post my project implementations once I am finished with this course.
 
 This repository contains my project implementations for:
 * Course:     CS 111
