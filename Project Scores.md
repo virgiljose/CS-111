@@ -5,9 +5,10 @@
 | 0 | 100 |
 | 1A | 100 |
 | 1B | 100 |
-| 2A | (not posted yet) |
-| 2B | (not posted yet) |
-| 3A | (not due yet) |
+| 2A | 95 |
+| 2B | 98 |
+| 3A | 91 |
 | 3B | (not due yet) |
 | 4A | 100 |
-| 4B | (not posted yet) |
+| 4B | 100 |
+| 4C | 100 |
