@@ -1,0 +1,61 @@
+NAME: Virgil Jose
+EMAIL: xxxxxxxxx
+ID: xxxxxxxxx
+
+INCLUDED FILES:
+	 SortedList.h		Header file for interface for linked list implementation
+	 SortedList.c		Source "					       "
+	 lab2_list.c		Source file that creates and does operations on lists using multople threads, and reports on the final list and performance, in accordance to specification.
+	 Makefile		Builds the programs, graphs, and tarball.
+	 lab2b_list.csv		Results of test runs
+	 profile.out		Execution profiling report
+	 lab2_list.gp		Creates graphs
+	 
+	 GRAPHS:
+		lab2b_1.png	throughput vs num threads, mutex and spin-lock
+		lab2b_2.png	mean time per mutex wait, mean time per operation using mutex
+		lab2b_3.png	successful iterations vs threads, each sync method
+		lab2b_4.png	throughput vs number of threads, mutex
+		lab2b_5.ong	throughput vs number of threads, spin-lock
+
+	README (this file)	description of included files, answers to questions
+
+
+
+ANSWERS TO QUESTIONS:
+
+	2.3.1:
+	In the 1 and 2-thread tests, most of the cycles are spent in doing the list operations, as most of the time will be spent in doing this operations.
+
+	For the high-thread spin-lock tests, most of the cycles are being spent spinnning because there the linked list operations are large critical sections, and with a high
+	number of threads, there is large contention and thus a lot of cycles would be spent on spinning/waiting to be able to enter these critical sections.
+
+	For the high-thread mutex tests, most of the time (but not necessarily cycles) are being spent waiting to be able to access the critical sections as mentioned above.
+	Again, there is large contention for the mutex, and thus a lot of time is spent waiting for access to those critical sections to be granted. The difference is that no
+	spinning (and thus cycle usage) is involved in waiting for such access. If looking strictly at cycles, then most of the cycles are spent on doing the list operations.
+
+
+
+	2.3.2:
+	Most of the time is spent in the while loops for the spin-locks:
+		while(__sync_lock_test_and_set(&spin_lock[list_num], 1));
+
+	This operation becomes expensive with a high number of threads because so many threads would be spinning to acquire the one spin-lock that can be used to enter the 
+	critical section (i.e. there is more contention). In addition, spin-locks are simple and thus do not take into account fairness and the possibility of thread
+	starvation.
+
+
+
+	2.3.3:
+	Average lock-wait time rises dramatically because more threads want to access just one lock; there is more contention. Thus more threads would have to wait for one lock, 
+	and a thread is less likely to be able to get the lock at a given time.
+
+	Completion time per operation rises (less dramatically) because a thread will yield (instead of spin) for a lock.
+
+
+
+	2.3.4:
+	As you increase the number of lists, you decrease the contention for synchronization objects because there are more lists available for a given thread to work on 
+	(each has its own synchronization objects).
+
+	Not necessarily. As you increase the number of lists, there is more time being spent on creating and managing multiple lists.

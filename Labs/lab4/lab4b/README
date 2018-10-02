@@ -1,0 +1,24 @@
+NAME: Virgil Jose
+EMAIL: xxxxxxxxx
+ID: xxxxxxxxx
+
+Included Files:
+	lab4b.c		C source file. Checks and reports temperature with a specified sampling rate (default: 1/sec).
+	Makefile	Compiles the program. Also includes the option to smoke-test the executable.
+	README		This file. Describes included files and submission comments.
+
+Submission Comments:
+	1.	In my implementation:
+			a) The button is connected to GPIO_51
+			b) The temperature sensor is connected to AIN0
+
+	2.	The recommended calibration constants for the sensor is off by around 10 degrees or more. Any incorrect readings is
+		due to my decision to use such constants.
+
+	3.	Regarding the button, I found that simply using mraa_gio_isr is more effective than sampling the state of the button
+		every second. Using the latter method in my implementation is not always reliable; I found that I sometimes need to 
+		hold the button down until the program would shut down. With the first method, a press of the button would immediately
+		shut down the program as intended.
+
+
+

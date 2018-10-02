@@ -1,0 +1,96 @@
+ROUTINE ====================== thread_fctn in /u/cs/ugrad/virgil/CS111/lab2/2b/lab2_list.c
+     1    506 Total samples (flat / cumulative)
+     .      .  100:   if(opt_spin_lock)
+     .      .  101:     __sync_lock_release(&spin_lock[list_num]);
+     .      .  102: }
+     .      .  103: 
+     .      .  104: /* Thread function */
+---
+     .      .  105: void * thread_fctn(void * args) {
+     .      .  106: 
+     .      .  107:   int tid = *(unsigned int *) args;
+     .      .  108:   unsigned int i, mod;
+     .      .  109:   unsigned int num_times = num_iterations * num_threads;
+     .      .  110:   
+     .      .  111:   /* insert elements into lists */
+     .      .  112:   for(i = tid; i < num_times; i += num_threads) {
+     .      .  113:     /* determine which list a given element is inserted into, based on the first character of the element's key */
+     1      1  114:     mod = (elements[i].key[0] - '0') % num_lists;
+     .    294  115:     list_sync_lock(mod);
+     .     56  116:     SortedList_insert(thread_list[mod], &elements[i]);
+     .      .  117:     list_sync_unlock(mod);
+     .      .  118:   }
+     .      .  119:   
+     .      .  120:   /* look up and delete each element */
+     .      .  121:   SortedListElement_t* t_element;
+     .      .  122:   for(i = tid; i < num_times; i+= num_threads) {
+     .      .  123:     mod = (elements[i].key[0] - '0') % num_lists;
+     .     81  124:     list_sync_lock(mod);
+     .     74  125:     if((t_element = SortedList_lookup(thread_list[mod], elements[i].key)) == NULL) {
+     .      .  126:       fprintf(stderr, "Error looking up element. Expected element with key %s, but none found\n", elements[i].key);
+     .      .  127:       exit(2);
+     .      .  128:     }
+     .      .  129:     else {
+     .      .  130:       if(SortedList_delete(t_element) == 1) {
+     .      .  131: 	fprintf(stderr, "Error deleting element with key %s. Associated node's next and prev pointers are corrupted\n", elements[i].key);
+     .      .  132: 	exit(2);
+     .      .  133:       }
+     .      .  134:     list_sync_unlock(mod);
+     .      .  135:   }
+     .      .  136:   }
+     .      .  137: 
+     .      .  138:   pthread_exit(NULL);
+---
+     .      .  139:   return NULL;
+     .      .  140: }
+     .      .  141: 
+     .      .  142: /* Creates and runs threads */
+     .      .  143: void run_threads() {  
+ROUTINE ====================== thread_fctn in /u/cs/ugrad/virgil/CS111/lab2/2b/lab2_list.c
+     1    506 Total samples (flat / cumulative)
+     .      .  100:   if(opt_spin_lock)
+     .      .  101:     __sync_lock_release(&spin_lock[list_num]);
+     .      .  102: }
+     .      .  103: 
+     .      .  104: /* Thread function */
+---
+     .      .  105: void * thread_fctn(void * args) {
+     .      .  106: 
+     .      .  107:   int tid = *(unsigned int *) args;
+     .      .  108:   unsigned int i, mod;
+     .      .  109:   unsigned int num_times = num_iterations * num_threads;
+     .      .  110:   
+     .      .  111:   /* insert elements into lists */
+     .      .  112:   for(i = tid; i < num_times; i += num_threads) {
+     .      .  113:     /* determine which list a given element is inserted into, based on the first character of the element's key */
+     1      1  114:     mod = (elements[i].key[0] - '0') % num_lists;
+     .    294  115:     list_sync_lock(mod);
+     .     56  116:     SortedList_insert(thread_list[mod], &elements[i]);
+     .      .  117:     list_sync_unlock(mod);
+     .      .  118:   }
+     .      .  119:   
+     .      .  120:   /* look up and delete each element */
+     .      .  121:   SortedListElement_t* t_element;
+     .      .  122:   for(i = tid; i < num_times; i+= num_threads) {
+     .      .  123:     mod = (elements[i].key[0] - '0') % num_lists;
+     .     81  124:     list_sync_lock(mod);
+     .     74  125:     if((t_element = SortedList_lookup(thread_list[mod], elements[i].key)) == NULL) {
+     .      .  126:       fprintf(stderr, "Error looking up element. Expected element with key %s, but none found\n", elements[i].key);
+     .      .  127:       exit(2);
+     .      .  128:     }
+     .      .  129:     else {
+     .      .  130:       if(SortedList_delete(t_element) == 1) {
+     .      .  131: 	fprintf(stderr, "Error deleting element with key %s. Associated node's next and prev pointers are corrupted\n", elements[i].key);
+     .      .  132: 	exit(2);
+     .      .  133:       }
+     .      .  134:     list_sync_unlock(mod);
+     .      .  135:   }
+     .      .  136:   }
+     .      .  137: 
+     .      .  138:   pthread_exit(NULL);
+---
+     .      .  139:   return NULL;
+     .      .  140: }
+     .      .  141: 
+     .      .  142: /* Creates and runs threads */
+     .      .  143: void run_threads() {  

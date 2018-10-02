@@ -1,0 +1,158 @@
+NAME: Virgil Jose
+EMAIL: xxxxxxxxx
+ID: xxxxxxxxx
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+INCLUDED FILES:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FILE:			DESCRIPTION:
+-----			------------
+backtrace.png		Screenshot showing backtrace of segmentation fault.
+
+breakpoint.png		Screenshot showing breakpoint of segmentation fault, showing that the pointer that causes it is NULL.
+
+lab0			Executable file. Reads from stdin and writes to stdout.
+			
+			OPTIONS:			DESCRIPTION:
+			--input=filename1		Specify input file (can also use piping, e.g. < or | ). If not specified, read from stdin.
+			--output=filename2		Specify output file (can also use piping, e.g. < or | ). If not specified, write to stdout.
+			--segfault			Cause a segmentation fault.
+			--catch				Register SIGSEGV handler that catches segmentation fault.
+
+lab0.c			C source code of lab0 executable.
+
+Makefile		Compiles lab0.c
+
+			OPTIONS:			DESCRIPTION:
+			make				Compiles lab0.c.
+			make clean			Removes file (lab0 executable) made by Makefile.
+			make check			Runs test cases (see below) to make sure that program works correctly.
+			make dist			Creates tar file containing the following:
+								* backtrace.png
+								* breakpoint.png
+								* lab0.c
+								* Makefile
+								* README
+
+README (this file)	Information about lab0 executable and the files included.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+SOURCES:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+I used the following webpage's sample structure to write my getopt_long(3) implementation:
+https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
+
+I also consulted this source for help with implementing getopt_long(3):
+https://stackoverflow.com/questions/1052746/getopt-does-not-parse-optional-arguments-to-parameters
+
+I used the following HTML page given in the project specification page to implement dup(2):
+file:///Users/virgil/Dropbox/UCLA/UCLA%20Classes/Year%202%20(2017%20-%202018)/2018%20(Year%202)%20-%20Winter/CS%20111/fd_juggling.html
+
+I referred to these webpages to implement strerror(3):
+http://man7.org/linux/man-pages/man3/strerror.3.html
+https://www.google.com/search?q=errno(3)&oq=errno(3)&aqs=chrome..69i57j0l5.2286j0j7&sourceid=chrome&ie=UTF-8
+
+For the POSIX file operations, I consulted their respective man pages.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+TEST CASES:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+NOTE:	This is a comprehensive list of test cases.
+	Only the important test cases (i.e. the smoke-test cases), denoted on the side, are tested in 'make check'.
+	Test cases that are not included in make check were tested manually.
+
+KEY:
+** "file1" and "file2" refer to arbitrary text files.
+** "non-existent-file" refers to a text file that does not exist.
+** "no-read" refers to a text file with no read permissions.
+** "no-write" refers to a text file with no write permissions.
+
+--------------------------------------------------
+Test Cases that Run Normally:
+--------------------------------------------------
+
+NOTE: USE C-d TO STOP READING FROM stdin
+
+INFO:								TEST CASE:					TESTED IN make check?
+-----								----------					---------------------
+No options							./lab0							Y
+
+Input only							./lab0 --input=file1				(not tested b/c requires user input)
+
+Input only (piped)						./lab0 < file1					(not tested b/c requires user input)
+
+Input only (piped)						echo "Test text" | ./lab0			(not tested b/c requires user input)
+
+Output only							./lab0 --output=file2					Y
+
+Output only (piped)						./lab0 > file2						Y
+
+Both input and output.						./lab0 --input=file1 --output=file2			Y
+Input before output.
+
+Both input and output.						./lab0 --output=file2 --input=file1			Y
+Input after output.
+
+Both input and output.						echo "Test text" | ./lab0 --output=file2		
+Input piped.
+
+Both input and output.						./lab0 --output=file2 < file1				Y
+Input piped.
+
+Both input and output.						./lab0 --input=file1 > file2				Y
+Output piped.
+
+Both input and output.						echo "Test text" | ./lab0 > file2			
+Input and output piped.
+
+Both input and output.						./lab0 < file1 > file2					Y
+Input and output piped.
+
+--------------------------------------------------
+Test Cases that Produce an Error as Expected:
+--------------------------------------------------
+
+ERROR:								TEST CASE(S):
+------								-------------
+./lab0: option '--input' requires an argument			./lab0 --input
+								./lab0 --output=file2 --input
+
+--input: unable to open file: No such file or directory		./lab0 --input=
+								./lab0 --input=non_existent_file
+								./lab0 --input --output=file2
+								./lab0 --input= --output=file2
+								./lab0 --input=non_existent_file --output=file2		Y
+								./lab0 --output=file2 --input=
+								./lab0 --input --output
+								./lab0 --input= --output
+								./lab0 --input= --output=
+								./lab0 --input=non_existent_file --output
+								./lab0 --input=non_existent_file --output=
+
+--input: unable to open file no-read: Permission denied		./lab0 --input=no-read --output=file2			Y
+
+./lab0: option '--output' requires an argument			./lab0 --output
+								echo "Test text" | ./lab0 --output
+								./lab0 --input=file1 --output
+
+--output: unable to create file: No such file or directory	./lab0 --output=
+								echo "Test text" | ./lab0 --output=
+								./lab0 --input=file1 --output=
+								./lab0 --output= --input
+								./lab0 --output= --input=
+								./lab0 --output= --input=file1
+
+--output: unable to create file no-write: Permission denied	./lab0 --input=file1 --output=no-write			Y
+
+-bash: no-write: Permission denied				./lab0 --input=file1 > no-write.txt
+
+Segmentation fault						./lab0 --segfault
+								./lab0 --input=file1 --output=file2 --segfault
+								./lab0 --segfault --catch
+								./lab0 --segfault --catch < file1 > file2		Y
+								./lab0 --input=file1 --output=file2 --segfault --catch	Y
+
+------------------------------------------------------------------------------------------------------------------------------------------------------

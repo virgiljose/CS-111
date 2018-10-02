@@ -1,0 +1,44 @@
+NAME: Virgil Jose
+EMAIL: xxxxxxxxx
+ID: xxxxxxxxx
+
+Included Files:
+
+	lab4c_tcp.c	Connects to TCP server. Outputs temperature data to server. Receives input from server
+			for changing parameters of sampling and data output.
+
+	lab4c_tls.c	Connects to TLS server. Outputs temperature data to server. Receives input from server
+			for changing parameters of sampling and data output.
+
+	Makefile	Creates executables of sources files and distribution tarball.
+
+	README		This file. Describes the included files, research and limitations regarding the project.
+
+Research:
+
+	For the TCP server, I simply used my Project 1B implementation as a reference.
+
+	Implementing SSL/TLS server:
+
+		I used this website for a comprehensive tutorial on using the OpenSSL API:
+		https://www.ibm.com/developerworks/library/l-openssl/
+
+		Due to the complexity of the interface, I also consulted this website to simplify my TLS client
+		implementation:
+		https://stackoverflow.com/questions/7698488/turn-a-simple-socket-into-an-ssl-socket
+
+
+Limitations:
+
+	In the TLS implementation, due to complications in attempting to measure the number of digits in a float 
+	value, I decided to output temperature readings to the server as such:
+
+	if(temp >= 100 || temp <= -100 )
+		SSL_write(ssl, time_report, 15);
+	else if(temp >= 10 || temp <= -10)
+		SSL_write(ssl, time_report, 14);
+	else
+		SSL_write(ssl, time_report, 13);
+
+	Therefore, the program will only output properly for temperature values ranging from -1000 < T < 1000. This
+	is fine, because this range well encompasses the operating range of the temperature sensor and the BeagleBone.
