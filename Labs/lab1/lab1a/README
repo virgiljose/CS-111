@@ -1,0 +1,62 @@
+NAME: Virgil Jose
+EMAIL: xxxxxxxxx
+ID: xxxxxxxxx
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+INCLUDED FILES:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FILE:				DESCRIPTION:
+-----				-----------
+
+lab1a-904765891.tar.gz		Tar file that contains all of the below files (except the lab1a executable, which has to be compiled).
+
+lab1a (when compiled)		Executable file. Can run without any options, or with the "--shell" option. Behavior of program depends on the option
+      	    			specified, as described below:
+
+      	    				   OPTION:   	 	 DESCRIPTION:
+					   -------		 ------------
+
+      	    				   (none specified):	 Read input from keyboard (STDIN) to buffer in character-at-a-time, no-echo mode (also
+					       			 known as non-canonical input mode with no echo).
+
+					   --shell:		 Creates two processes - the parent process is the terminal while the child process
+					   			 is an executed shell. Pass input from terminal to shell, output shell output to
+								 terminal. Terminal is run in character-at-a-time, no-echo mode.
+				COMMAND: ./lab1a (options)
+
+lab1a.c	    			C source file for lab1a executable.
+
+Makefile			Compiles lab1a.c and creates lab1a executable. Has three targets:
+
+					 TARGET:     	     DESCRIPTION:
+					 -------	     ------------
+
+					 (default)	     Compiles lab1a.c (with -Wall and -Wextra options)
+
+					 clean		     Removes lab1a executable and lab1a-904765891.tar.gz
+
+					 dist		     Compiles lab1a.c (with -Wall and -Wextra options). Creates a tar file named
+					 		     lab1a-904765891.tar.gz. Puts lab1a.c (C source file), Makefile, and README into the
+							     tar file.
+
+README (this file)		Description of the lab1a executable and the other included files.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+SOURCES:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+SOURCE:								DESCRIPTION:
+-------								------------
+
+http://www.unixguide.net/unix/programming/2.1.2.shtml		Used example on website (with some changes) to implement poll(2).
+
+https://linux.die.net/man/3/termios				Found this webpage helpful in learning how to implement the termios functions.
+
+https://linux.die.net/man/2/waitpid				Same website as above; also was helpful in learning how to implement waitpid(2).
+
+Zhaoxing Bu (my TA)						Used his sample code (with one modification) to implement pipe(2), dup(2), and
+	    							exec(3).
+
+								I had to dup(2) to STDERR (which wasn't present in his implementation) in order for
+								my program to work properly.
