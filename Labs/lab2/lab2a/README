@@ -1,0 +1,118 @@
+NAME: Virgil Jose
+EMAIL: xxxxxxxxx
+ID: xxxxxxxxx
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+INCLUDED FILES:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FILE:				DESCRIPTION:
+-----				------------
+lab2_add.c			C file for the lab2_add inmplementation.
+
+SortedList.h			Header file for SortedList (doubly linked-list) implementation.
+
+SortedList.c			C file for SortedList implementation.
+
+lab2_list.c			C file for the lab2_list implementation.
+
+Makefile			File that compiles lab2_add and lab2_list. Also can create a tar dist, test the program, and create graphs about
+				various aspects of project implemention.
+
+lab2_add.csv			Data from lab2_add for the graphs.
+
+lab2_list.csv			Data from lab2_list for the graphs.
+
+lab2_add-1.png			Threads and iterations that run without failure (all options w/out yields)
+
+lab2_add-2.png			Costs of yielding
+
+lab2_add-3.png			Per-operation cost vs number of iterations
+
+lab2_add-4.png			Threads and iterations that run without failure (unprotected w/ yields)
+
+lab2_add-5.png			Per operation cost vs number of threads
+
+lab2_list-1.png			Cost per operation vs iterations
+
+lab2_list-2.png			Unprotected threads and iterations that run without failure
+
+lab2_list-3.png			Protected iterations that run without failure
+
+lab2_list-4.png			Scalability of synchronization mechanisms
+
+README (this file)		Information about the included files. Notes about implementation. Answers to questions.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+ANSWERS TO QUESTIONS:
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2.1.1: Why does it take many iterations before errors are seen? Why does a significantly smaller number of iterations so seldom fail?
+
+       Each add calculation is a very short operation. There is an overhead associated with creating threads. When there are a small number of 
+       operations, it may take more time to create the threads than to complete all the add operations. Not only that, but the fewer number of 
+       operations that need to be performed, the smaller the chance of incorrect calculations.
+
+
+
+2.1.2: Why are the --yield runs so much slower? Where is the additional time going? Is it possible to get valid per-operation timings if we are using 
+the --yield option? If so, explain how. If not, explain why not.
+
+       There is an large overhead associated with using yield - we must perform a context switch every time we yield. Because this overhead would
+       be included in the per-operation timings, it is not possible to get valid per-operation timings with the yield option.
+
+
+
+2.1.3: Why does the average cost per operation drop with increasing iterations? If the cost per iteration is a function of the number of iterations,
+how do we know how many iterations to run (or what the "correct" cost is)?
+
+       There is an large cost to initially creating a thread. With a low number of iterations, this large cost outweights the benefits of performing
+       the multithreaded operations. However, as we increase the number of iterations, the large cost becomes small to such benefits.
+
+       We determine how many iterations to run by observing how many iterations it takes for the average cost per operation to "plateau" - there
+       is a certain point where more iterations no longer benefits. This is the point that we use to determine how many iterations to run.
+
+
+
+2.1.4: Why do all of the options perform similarly for low numbers of threads? Why do the three protected operations slow down as the number of 
+threads rises?
+
+	For a low number of threads, there is less "competition" of which thread can access a given critical section.
+
+	As we increase the number of threads, more threads may want to access a critical section at a given time. Thus more threads will end up
+	wasting CPU clock cycles (or sleeping and being unproductive) waiting for the thread in the critical section to complete.
+
+
+
+2.2.1: Compare the variation in time per mutex-protected operation vs the number of threads in Part-1 (adds) and Part-2 (sorted lists). Comment on
+the general shapes of the curves, and explain why they have this shape. Comment on the relative rates of increase and differences in the shapes of 
+the curves, and offer an explanation for these differences.
+
+       The graph in Part-1 showed a that the cost per operation initially increases as we increase the number of threads, but as we continue to
+       do so, the cost per operation plateaus, and even decreases slightly.
+
+       The graph in Part-2 showed that the increasing the number of threads increased the cost per operation.
+
+       In Part-1, there was only one, small critical section: the modifying of the counter. In contrast, Part 2 had several, larger critical
+       sections for modifying linked lists - one for insertion, one for deletion, and one for looking up elements. Having more and larger critical 
+       sections means that threads will spend more time waiting for a given thread to exit a critical section.
+
+       Thus, Part-1's cost per operation plateaus, as the benefits of multithreaded addition/subtraction outweigh the costs. In contrast, Part-2's 
+       cost per operation increases linearly because of the relatively large costs incurred by its critical sections.
+
+
+
+2.2.2: Compare the variation in time per protected operation vs the number of threads for list operations protected by Mutex vs Spin locks. 
+Comment on the general shapes of the curves, and explain why they have this shape. Comment on the relative rates of increase and differences in the 
+shapes of the curves, and offer an explanation for these differences.
+
+       Spin-locks cause a waiting thread to "spin", wasting CPU cycles. Mutexes do not cause a waiting thread to "spin".
+
+       For both cases, the cost per operation increases as the number of threads increase. Also, both have significantly higher costs than if
+       no synchonization were implemented.
+
+       The cost per operation when using spin-locks increases more sharply than the cost per operation when using mutexes. This is because with a 
+       large number of threads, more threads will be "spinning" and thus be wasting more CPU cycles. This is especially true in this case, where 
+       large critical sections are present and thus threads will need to wait (and thus spin) for longer periods of time.
+
+       
